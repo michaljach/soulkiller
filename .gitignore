@@ -1,0 +1,8 @@
+# Never commit personal data or model outputs
+data/
+models/
+outputs/
+config.toml
+.venv/
+__pycache__/
+*.pyc

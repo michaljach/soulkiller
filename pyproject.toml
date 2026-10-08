@@ -1,0 +1,23 @@
+[project]
+name = "soulkiller"
+version = "0.1.0"
+description = "Build a personal engram: ingest lifetime data, fine-tune a voice, index a memory."
+requires-python = ">=3.11"
+dependencies = [
+    "icalendar>=5.0",
+    "beautifulsoup4>=4.12",
+    "python-docx>=1.1",
+    "pypdf>=4.0",
+    "tomli-w>=1.0",
+]
+
+[project.optional-dependencies]
+rag = ["sentence-transformers>=3.0", "numpy>=1.26"]
+dev = ["pytest>=8"]
+
+[project.scripts]
+soulkiller = "soulkiller.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

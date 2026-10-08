@@ -1,0 +1,20 @@
+# Copy to config.toml and fill in. config.toml is gitignored.
+[me]
+name = "Your Name"
+# Every address you've ever sent mail from (case-insensitive)
+emails = ["you@gmail.com", "you@work.com"]
+# Display names / handles as they appear in chat exports (WhatsApp, Messenger, Telegram, Instagram...)
+names = ["Your Name", "yourhandle"]
+
+[paths]
+raw = "data/raw"              # unpack exports here, one folder per source (see README)
+processed = "data/processed"
+
+[filters]
+# Ignore any message thread whose participants match these (newsletters, bots, ...)
+skip_senders = ["noreply", "no-reply", "notifications@", "mailer-daemon"]
+min_chars = 2
+
+[sft]
+context_messages = 12          # how many prior messages to show as context
+max_chars_per_example = 6000

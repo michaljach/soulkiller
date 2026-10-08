@@ -1,0 +1,3 @@
+# On the Linux GPU box (CUDA 12.x). Install: python -m venv .venv && . .venv/bin/activate && pip install -r train/requirements.txt
+unsloth
+datasets
