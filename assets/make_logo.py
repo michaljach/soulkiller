@@ -63,13 +63,22 @@ def pixels(seed=6):
     return solid, fragments, w, h
 
 
-def render(path: Path, tile: bool, cell: int, gap: int, pad: int = 2, glow: bool = True, seed: int = 6):
-    """cell/gap are in CSS px at native size."""
+def render(path: Path, tile: bool, cell: int, gap: int, pad: int = 2, glow: bool = True, seed: int = 6,
+           centered: bool = False):
+    """cell/gap are in CSS px at native size.
+
+    centered=False: square canvas with face + debris centred (avatar, favicon).
+    centered=True:  canvas symmetric around the face itself, so plain CSS centring centres the face.
+    """
     solid, fragments, w, h = pixels(seed)
-    total_w = w + COLS_EXTRA
-    side = max(total_w, h) + pad * 2          # square canvas: works as avatar / favicon
-    W = H = side * cell
-    ox, oy = (side - total_w) // 2, (side - h) // 2   # centre the glyph + its debris
+    if centered:
+        cols, rows = w + 2 * COLS_EXTRA + 2 * pad, h + 2 * pad
+        ox, oy = COLS_EXTRA + pad, pad
+    else:
+        total_w = w + COLS_EXTRA
+        cols = rows = max(total_w, h) + pad * 2
+        ox, oy = (cols - total_w) // 2, (rows - h) // 2
+    W, H = cols * cell, rows * cell
 
     def px(x, y, level, alpha=1.0):
         fill = HIGHLIGHT if level == LEVELS - 1 else RED
@@ -94,7 +103,7 @@ def render(path: Path, tile: bool, cell: int, gap: int, pad: int = 2, glow: bool
         out.append(px(x, y, level))
         seen.add((x, y))
     for x, y, level, a in fragments:
-        if (x, y) in seen or y + oy < 1 or x + ox >= side:
+        if (x, y) in seen or y + oy < 1 or x + ox >= cols:
             continue
         seen.add((x, y))
         out.append(px(x, y, level, a))
@@ -107,10 +116,12 @@ VARIANTS = {
     # name: (tile, cell px, gap px, extra)
     "logo.svg":      (True, 6, 1, {}),                 # README, 192px
     "logo-mark.svg": (False, 10, 1, {}),               # OG image, big placements, 320px
+    "face.svg":      (False, 9, 1, {"centered": True}),  # page decoration, 342px: fits a 390px phone
     "favicon.svg":   (True, 1, 0, {"pad": 0, "glow": False}),  # browsers downsample it
 }
 
 if __name__ == "__main__":
     for name, (tile, cell, gap, extra) in VARIANTS.items():
         render(HERE / name, tile=tile, cell=cell, gap=gap, **extra)
-        print(name, open(HERE / name).readline().split('width="')[1].split('"')[0] + "px")
+        head = open(HERE / name).readline()
+        print(name, head.split('width="')[1].split('"')[0] + "x" + head.split('height="')[1].split('"')[0])
