@@ -1,8 +1,8 @@
 # soulkiller
 
-> Train an engram: a local LLM that talks like you and remembers your life, built from your lifetime data.
+> Compress yourself into an AI model: a local LLM with your personality and your memory, trained on your lifetime personal data.
 
-Your emails, chats, posts, docs, calendar and browsing history go in. Out comes a fine-tuned Qwen3 that answers in your voice, plus a memory index it can look things up in. Everything runs on your own hardware, and no data leaves your machines.
+Your emails, chats, posts, docs, calendar and browsing history go in. Out comes a fine-tuned Qwen3 with your personality, plus a memory index it can look things up in. Everything runs on your own hardware, and no data leaves your machines.
 
 ---
 
@@ -10,9 +10,9 @@ Your emails, chats, posts, docs, calendar and browsing history go in. Out comes 
 
 An engram has two halves, because fine-tuning and memory are different problems:
 
-| | **Voice** | **Memory** |
+| | **Personality** | **Memory** |
 |---|---|---|
-| Question it answers | *How* would I say this? | *What* happened in my life? |
+| Question it answers | *How* would you say this? | *What* happened in your life? |
 | Technique | QLoRA fine-tune of Qwen3 | Retrieval over an embedding index |
 | Trained on | Only text **you wrote**: replies, posts, commits | **Everything**: mail, docs, calendar, lifelog |
 | Why this way | Fine-tuning captures style, tone, opinions, language mixing | Fine-tuning blurs facts. Retrieval recalls them exactly, with dates |
@@ -104,14 +104,14 @@ sequenceDiagram
     E->>I: semantic search
     I-->>E: calendar: Wedding of Kasia, Kraków, 2021-05-15<br/>emails & chats from that week
     E->>L: system prompt + retrieved memories + question
-    L-->>Q: answer in your voice, grounded in real events
+    L-->>Q: answer with your personality, grounded in real events
 ```
 
 ---
 
 ## Data sources
 
-| Source | Parsed from | Becomes | Voice | Memory |
+| Source | Parsed from | Becomes | Personality | Memory |
 |---|---|---|:-:|:-:|
 | **Gmail** | Takeout `*.mbox` | threads by `X-GM-THRID`, quoted history stripped | ✅ | ✅ |
 | **Calendar** | Takeout `*.ics` | events with place + attendees | | ✅ |
@@ -171,7 +171,7 @@ uv run soulkiller build       # -> data/processed/sft_train.jsonl, sft_val.jsonl
 
 `stats` lists the top chat senders that weren't matched as you. If any of them *are* you under an old name, add them to `[me].names` and re-ingest. Skim a few lines of `sft_train.jsonl` before training: garbage in, garbage soul.
 
-Rough guide to how much text you need: **under ~200k tokens** of your own writing gives a thin voice, and **1M+** gives a strong one.
+Rough guide to how much text you need: **under ~200k tokens** of your own writing gives a thin personality, and **1M+** gives a strong one.
 
 ### 3. Train (Linux, RTX 4080 Super 16 GB)
 
@@ -223,7 +223,7 @@ soulkiller/
 ## Roadmap
 
 - [x] Ingestion for 14 sources
-- [x] Voice dataset builder
+- [x] Personality dataset builder
 - [x] QLoRA training + GGUF export
 - [ ] Memory: multilingual embedding index (`bge-m3`) over messages + docs
 - [ ] Engram chat: retrieval-augmented chat with the fine-tuned model
