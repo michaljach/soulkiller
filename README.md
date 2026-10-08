@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/logo.svg" width="200" height="200" alt="soulkiller: a pixelated human face dissolving into data">
+  <img src="assets/logo.svg" width="192" height="192" alt="soulkiller: a pixelated human face dissolving into data">
 </p>
 
 <h1 align="center">soulkiller</h1>

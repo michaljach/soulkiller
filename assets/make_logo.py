@@ -19,9 +19,9 @@ from PIL import Image, ImageOps
 HERE = Path(__file__).parent
 SOURCE = HERE / "source" / "face.png"
 CROP = (190, 30, 840, 930)  # left, top, right, bottom of the face in the source portrait
-COLS = 26                    # face width in cells: fewer = chunkier, more = more realistic
+COLS = 20                    # face width in cells: fewer = chunkier, more = more realistic
 LEVELS = 6                   # brightness steps (0 = off)
-COLS_EXTRA = 9               # room on the right for drifting fragments
+COLS_EXTRA = 7               # room on the right for drifting fragments
 
 # Palette from jach.me/engram (engram.css)
 RED = "#FF2D3F"          # --red
@@ -105,8 +105,8 @@ def render(path: Path, tile: bool, cell: int, gap: int, pad: int = 2, glow: bool
 
 VARIANTS = {
     # name: (tile, cell px, gap px, extra)
-    "logo.svg":      (True, 5, 1, {}),                 # README, 200px
-    "logo-mark.svg": (False, 8, 1, {}),                # OG image, big placements, 320px
+    "logo.svg":      (True, 6, 1, {}),                 # README, 192px
+    "logo-mark.svg": (False, 10, 1, {}),               # OG image, big placements, 320px
     "favicon.svg":   (True, 1, 0, {"pad": 0, "glow": False}),  # browsers downsample it
 }
 
