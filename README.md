@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/logo.svg" width="168" height="168" alt="soulkiller: a pixel face dissolving into data">
+  <img src="assets/logo.svg" width="200" height="200" alt="soulkiller: a pixelated human face dissolving into data">
 </p>
 
 <h1 align="center">soulkiller</h1>
@@ -213,7 +213,7 @@ soulkiller/
 ├── train/
 │   ├── train.py            # Unsloth QLoRA on Qwen3 → LoRA + GGUF
 │   └── chat.py             # talk to the result
-├── assets/                 # logo variants, pixel-snapped per size (make_logo.py)
+├── assets/                 # logo: AI portrait (source/) → red LED matrix (make_logo.py)
 └── tests/                  # fixture exports for each format
 ```
 
