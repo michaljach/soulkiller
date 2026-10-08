@@ -9,33 +9,26 @@ from pathlib import Path
 
 # '#' = face, 'o' = lit eyes (never dissolve), '.' = empty.
 FACE = """
-.......######.......
-.....##########.....
-....############....
-...##############...
-..################..
-..################..
-.##################.
-.##################.
-.###ooo######ooo###.
-.###ooo######ooo###.
-.##################.
-.##################.
-.#########.########.
-..########.#######..
-..#######...######..
-...##############...
-...###..........##..
-....###.......###...
-.....###########....
-......#########.....
-.......#######......
+....####....
+..########..
+.##########.
+.##########.
+############
+##oo####oo##
+##oo####oo##
+############
+############
+#####..#####
+.##########.
+.##......##.
+..########..
+....####....
 """.strip().splitlines()
 
-CELL = 10
-GAP = 2                      # gutter between pixels; ~1px when shown at 180px
-PAD = 4                      # cells of padding around the glyph
-COLS_EXTRA = 9               # room on the right for drifting fragments
+CELL = 18
+GAP = 3                      # gutter between pixels; ~1px when shown at 180px
+PAD = 2                      # cells of padding around the glyph
+COLS_EXTRA = 5               # room on the right for drifting fragments
 # Palette from jach.me/engram (engram.css)
 RED = "#FF2D3F"          # --red
 RED_LINE = "#4A1219"     # --red-line: card borders
@@ -43,7 +36,7 @@ BG = "#010101"           # --background-color
 EYE = "#FFFFFF"          # --text-color
 
 
-def pixels(seed=7):
+def pixels(seed=6):
     rnd = random.Random(seed)
     h, w = len(FACE), len(FACE[0])
     solid, eyes, fragments = [], [], []
@@ -54,19 +47,19 @@ def pixels(seed=7):
             if ch != "#":
                 continue
             # dissolution starts right of centre and grows towards the edge
-            d = max(0.0, (x - w * 0.6) / (w * 0.4))
-            if rnd.random() < d * 0.85:
+            d = max(0.0, (x - w * 0.5) / (w * 0.5))
+            if rnd.random() < d * 0.95:
                 # pixel breaks off: drifts right and slightly up, fading
                 dist = 1 + int(rnd.random() * (2 + d * COLS_EXTRA))
                 fx, fy = x + dist, y - int(rnd.random() * dist * 0.6)
-                if rnd.random() < 0.75:
+                if rnd.random() < 0.9:
                     fragments.append((fx, fy, max(0.15, 1 - dist / (COLS_EXTRA + 3))))
             else:
                 solid.append((x, y))
     return solid, eyes, fragments, w, h
 
 
-def render(path: Path, tile: bool, seed=7):
+def render(path: Path, tile: bool, seed=6):
     solid, eyes, fragments, w, h = pixels(seed)
     total_w = w + COLS_EXTRA
     side = max(total_w, h) + PAD * 2          # square canvas: works as avatar / favicon
@@ -78,7 +71,7 @@ def render(path: Path, tile: bool, seed=7):
            f'role="img" aria-label="soulkiller">',
            # same soft red glow as the page's buttons (box-shadow: 0 0 24px var(--red-glow))
            '<defs><filter id="glow" x="-30%" y="-30%" width="160%" height="160%">'
-           f'<feGaussianBlur stdDeviation="{CELL * 1.2}" result="b"/>'
+           f'<feGaussianBlur stdDeviation="{CELL * 0.8}" result="b"/>'
            '<feColorMatrix in="b" values="0 0 0 0 1  0 0 0 0 0.176  0 0 0 0 0.247  0 0 0 0.55 0"/>'
            '<feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>']
     if tile:
