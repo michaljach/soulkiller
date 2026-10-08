@@ -33,15 +33,14 @@ FACE = """
 """.strip().splitlines()
 
 CELL = 10
+GAP = 2                      # gutter between pixels; ~1px when shown at 180px
 PAD = 4                      # cells of padding around the glyph
 COLS_EXTRA = 9               # room on the right for drifting fragments
-LEFT, RIGHT = (0x3E, 0xF2, 0xFF), (0xFF, 0x2E, 0x88)   # cyan -> magenta
-BG = "#0B0D12"
-EYE = "#F4FBFF"
-
-
-def lerp(a, b, t):
-    return "#" + "".join(f"{round(x + (y - x) * t):02X}" for x, y in zip(a, b))
+# Palette from jach.me/engram (engram.css)
+RED = "#FF2D3F"          # --red
+RED_LINE = "#4A1219"     # --red-line: card borders
+BG = "#010101"           # --background-color
+EYE = "#FFFFFF"          # --text-color
 
 
 def pixels(seed=7):
@@ -73,28 +72,31 @@ def render(path: Path, tile: bool, seed=7):
     side = max(total_w, h) + PAD * 2          # square canvas: works as avatar / favicon
     W = H = side * CELL
     ox, oy = (side - total_w) // 2, (side - h) // 2   # centre the glyph + its debris
+    px = lambda x, y, fill, extra="": (f'<rect x="{(x + ox) * CELL}" y="{(y + oy) * CELL}" '
+                                        f'width="{CELL - GAP}" height="{CELL - GAP}" fill="{fill}"{extra}/>')
     out = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}" '
-           f'shape-rendering="crispEdges" role="img" aria-label="soulkiller">']
+           f'role="img" aria-label="soulkiller">',
+           # same soft red glow as the page's buttons (box-shadow: 0 0 24px var(--red-glow))
+           '<defs><filter id="glow" x="-30%" y="-30%" width="160%" height="160%">'
+           f'<feGaussianBlur stdDeviation="{CELL * 1.2}" result="b"/>'
+           '<feColorMatrix in="b" values="0 0 0 0 1  0 0 0 0 0.176  0 0 0 0 0.247  0 0 0 0.55 0"/>'
+           '<feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>']
     if tile:
-        out.append(f'<rect width="{W}" height="{H}" rx="{CELL * 3}" fill="{BG}"/>')
-        # faint scanlines
-        out += [f'<rect y="{y}" width="{W}" height="1" fill="#FFFFFF" opacity="0.035"/>' for y in range(0, H, 4)]
-    gap = 1  # 1px gutter between cells reads as "pixel"
+        out.append(f'<rect x="0.5" y="0.5" width="{W - 1}" height="{H - 1}" fill="{BG}" stroke="{RED_LINE}"/>')
+    out.append('<g filter="url(#glow)" shape-rendering="crispEdges">')
     seen = set()
     for x, y in solid:
-        color = lerp(LEFT, RIGHT, x / total_w)
-        out.append(f'<rect x="{(x + ox) * CELL}" y="{(y + oy) * CELL}" width="{CELL - gap}" height="{CELL - gap}" fill="{color}"/>')
+        out.append(px(x, y, RED))
         seen.add((x, y))
     for x, y in eyes:
-        out.append(f'<rect x="{(x + ox) * CELL}" y="{(y + oy) * CELL}" width="{CELL - gap}" height="{CELL - gap}" fill="{EYE}"/>')
+        out.append(px(x, y, EYE))
         seen.add((x, y))
     for x, y, a in fragments:
         if (x, y) in seen or y < -oy + 1:
             continue
         seen.add((x, y))
-        color = lerp(LEFT, RIGHT, min(1, x / total_w))
-        out.append(f'<rect x="{(x + ox) * CELL}" y="{(y + oy) * CELL}" width="{CELL - gap}" height="{CELL - gap}" '
-                   f'fill="{color}" opacity="{a:.2f}"/>')
+        out.append(px(x, y, RED, f' opacity="{a:.2f}"'))
+    out.append("</g>")
     out.append("</svg>")
     path.write_text("\n".join(out) + "\n")
 
