@@ -4,7 +4,7 @@
 
 <h1 align="center">soulkiller</h1>
 
-<p align="center"><i>Train your Soulkiller: a local LLM that talks like you and remembers your life, built from your lifetime data.</i></p>
+<p align="center"><i>Compress yourself into an AI model to be immortal: a local LLM with your personality and memory, trained on your lifetime personal data.</i></p>
 
 <p align="center">
   <a href="https://jach.me/soulkiller">Website</a> ·

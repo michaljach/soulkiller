@@ -1,7 +1,7 @@
 [project]
 name = "soulkiller"
 version = "0.1.0"
-description = "Build your Soulkiller: ingest lifetime data, fine-tune a voice, index a memory."
+description = "Compress yourself into an AI model to be immortal: a local LLM with your personality and memory, trained on your lifetime personal data."
 requires-python = ">=3.11"
 dependencies = [
     "icalendar>=5.0",
