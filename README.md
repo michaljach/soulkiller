@@ -4,7 +4,7 @@
 
 <h1 align="center">soulkiller</h1>
 
-<p align="center"><i>Train an engram: a local LLM that talks like you and remembers your life, built from your lifetime data.</i></p>
+<p align="center"><i>Train your Soulkiller: a local LLM that talks like you and remembers your life, built from your lifetime data.</i></p>
 
 <p align="center">
   <a href="https://jach.me/soulkiller">Website</a> ·
@@ -31,17 +31,17 @@ uv run soulkiller build     # -> data/processed/sft_train.jsonl
 
 # 2. Train (Linux, 16 GB GPU)
 pip install -r train/requirements.txt
-python train/train.py --model unsloth/Qwen3-8B --out outputs/engram-v1
+python train/train.py --model unsloth/Qwen3-8B --out outputs/soulkiller-v1
 
 # 3. Talk to it
-python train/chat.py outputs/engram-v1/lora --with "Anna" --channel WhatsApp
+python train/chat.py outputs/soulkiller-v1/lora --with "Anna" --channel WhatsApp
 ```
 
 You need your data exports first, and some of them take days to arrive. See [Usage](#usage) for the full walkthrough.
 
 ## How it works
 
-An engram has two halves, because fine-tuning and memory are different problems:
+Soulkiller has two halves, because fine-tuning and memory are different problems:
 
 | | Personality | Memory |
 |---|---|---|
@@ -60,7 +60,7 @@ flowchart LR
     BLD["soulkiller build<br/><sub>chat-format examples</sub>"]
     TRN["train/train.py<br/><sub>Qwen3-8B, 4-bit QLoRA</sub>"]
     IDX[("Memory index<br/><sub>embeddings</sub>")]
-    E(("Engram"))
+    E(("Soulkiller"))
 
     RAW --> ING --> BLD --> TRN --> E
     ING -.-> IDX -.-> E
@@ -107,7 +107,7 @@ i piję kawę
 </td></tr>
 </table>
 
-The system prompt carries **channel, people and date**. At inference you can steer the engram by setting them: *"you on email with your boss in 2015"* versus *"you on Messenger with your brother today"*.
+The system prompt carries **channel, people and date**. At inference you can steer the model by setting them: *"you on email with your boss in 2015"* versus *"you on Messenger with your brother today"*.
 
 ## Data sources
 
@@ -187,14 +187,14 @@ ssh gpu-box
 cd soulkiller && python -m venv .venv && . .venv/bin/activate && pip install -r train/requirements.txt
 
 python train/train.py --model unsloth/Qwen3-4B --epochs 1 --out outputs/smoke   # quick sanity run
-python train/train.py --model unsloth/Qwen3-8B --out outputs/engram-v1          # the real one
-python train/chat.py outputs/engram-v1/lora --with "Anna" --channel WhatsApp
+python train/train.py --model unsloth/Qwen3-8B --out outputs/soulkiller-v1          # the real one
+python train/chat.py outputs/soulkiller-v1/lora --with "Anna" --channel WhatsApp
 ```
 
 | Model | Fits 16 GB? | Use for |
 |---|---|---|
 | `unsloth/Qwen3-4B` | Easily | Fast iteration on the dataset |
-| `unsloth/Qwen3-8B` | Yes (default) | The real engram |
+| `unsloth/Qwen3-8B` | Yes (default) | The real one |
 | `unsloth/Qwen3-14B` | Tight (lower `--max-seq` / `--batch`) | Best quality, especially Polish |
 
 Output goes to `outputs/<name>/lora` (the adapter) and `outputs/<name>/gguf` (for Ollama, llama.cpp or LM Studio on the Mac).
@@ -231,15 +231,15 @@ soulkiller/
 - [x] Personality dataset builder
 - [x] QLoRA training + GGUF export
 - [ ] Memory: multilingual embedding index (`bge-m3`) over messages + docs
-- [ ] Engram chat: retrieval-augmented chat with the fine-tuned model
-- [ ] Eval: blind test, so friends guess *real you vs engram* on held-out conversations
+- [ ] Soulkiller chat: retrieval-augmented chat with the fine-tuned model
+- [ ] Eval: blind test, so friends guess *real you vs Soulkiller* on held-out conversations
 
 ### Target: talking to it
 
 ```mermaid
 sequenceDiagram
     actor Q as You / anyone
-    participant E as Engram
+    participant E as Soulkiller
     participant I as Memory index
     participant L as Qwen3 + your LoRA
     Q->>E: "What did you do for Kasia's wedding?"
