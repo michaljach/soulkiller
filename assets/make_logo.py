@@ -23,7 +23,7 @@ COLS = 20                    # face width in cells: fewer = chunkier, more = mor
 LEVELS = 6                   # brightness steps (0 = off)
 COLS_EXTRA = 7               # room on the right for drifting fragments
 
-# Palette from jach.me/engram (engram.css)
+# Palette from jach.me/soulkiller (soulkiller.css)
 RED = "#FF2D3F"          # --red
 HIGHLIGHT = "#FF7F8A"    # brightest level: lit skin reads as a hot LED
 RED_LINE = "#4A1219"     # --red-line: card borders

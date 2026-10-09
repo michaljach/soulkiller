@@ -1,7 +1,7 @@
 [project]
 name = "soulkiller"
 version = "0.1.0"
-description = "Build a personal engram: ingest lifetime data, fine-tune a voice, index a memory."
+description = "Build your Soulkiller: ingest lifetime data, fine-tune a voice, index a memory."
 requires-python = ">=3.11"
 dependencies = [
     "icalendar>=5.0",

@@ -1,6 +1,6 @@
 """Talk to the trained adapter on the GPU box.
 
-    python train/chat.py outputs/engram/lora --with "Anna Nowak" --channel WhatsApp
+    python train/chat.py outputs/soulkiller/lora --with "Anna Nowak" --channel WhatsApp
 """
 from __future__ import annotations
 

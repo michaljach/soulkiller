@@ -1,6 +1,6 @@
 """QLoRA fine-tune of Qwen3 on sft_train.jsonl. Runs on a single 16 GB GPU (RTX 4080 Super).
 
-    python train/train.py --data data/processed --out outputs/engram-v1
+    python train/train.py --data data/processed --out outputs/soulkiller-v1
 """
 from __future__ import annotations
 
@@ -14,7 +14,7 @@ from trl import SFTConfig, SFTTrainer
 
 p = argparse.ArgumentParser()
 p.add_argument("--data", default="data/processed")
-p.add_argument("--out", default="outputs/engram")
+p.add_argument("--out", default="outputs/soulkiller")
 p.add_argument("--model", default="unsloth/Qwen3-8B", help="unsloth/Qwen3-4B for fast iteration, unsloth/Qwen3-14B to max out 16 GB")
 p.add_argument("--max-seq", type=int, default=4096)
 p.add_argument("--epochs", type=float, default=2)
